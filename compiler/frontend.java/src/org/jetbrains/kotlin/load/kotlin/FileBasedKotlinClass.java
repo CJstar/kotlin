@@ -62,7 +62,7 @@ public abstract class FileBasedKotlinClass implements KotlinJvmBinaryClass {
         }
     }
 
-    protected static class InnerClassesInfo {
+    public static class InnerClassesInfo {
         private Map<String, OuterAndInnerName> map = null;
 
         public void add(@NotNull String name, @Nullable String outerName, @Nullable String innerName) {
@@ -132,6 +132,11 @@ public abstract class FileBasedKotlinClass implements KotlinJvmBinaryClass {
     @Override
     public KotlinClassHeader getClassHeader() {
         return classHeader;
+    }
+
+    @NotNull
+    public InnerClassesInfo getInnerClasses() {
+        return innerClasses;
     }
 
     @Override

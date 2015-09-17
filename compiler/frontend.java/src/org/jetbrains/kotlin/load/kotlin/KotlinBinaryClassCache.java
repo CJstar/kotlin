@@ -25,57 +25,62 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public final class KotlinBinaryClassCache implements Disposable {
-    private static class RequestCache {
-        VirtualFile virtualFile;
-        long modificationStamp;
-        VirtualFileKotlinClass virtualFileKotlinClass;
+    private static class CachedResult {
+        public final long modificationStamp;
+        public final VirtualFileKotlinClass kotlinClass;
 
-        public VirtualFileKotlinClass cache(VirtualFile file, VirtualFileKotlinClass aClass) {
-            virtualFile = file;
-            virtualFileKotlinClass = aClass;
-            modificationStamp = file.getModificationStamp();
-
-            return aClass;
+        public CachedResult(long modificationStamp, @Nullable VirtualFileKotlinClass kotlinClass) {
+            this.modificationStamp = modificationStamp;
+            this.kotlinClass = kotlinClass;
         }
     }
 
-    private final ThreadLocal<RequestCache> cache =
-            new ThreadLocal<RequestCache>() {
-                @Override
-                protected RequestCache initialValue() {
-                    return new RequestCache();
-                }
-            };
+    private final Map<String, CachedResult> map = new ConcurrentHashMap<String, CachedResult>();
 
     @Nullable
     public static KotlinJvmBinaryClass getKotlinBinaryClass(@NotNull final VirtualFile file) {
         if (file.getFileType() != JavaClassFileType.INSTANCE) return null;
 
         KotlinBinaryClassCache service = ServiceManager.getService(KotlinBinaryClassCache.class);
-        RequestCache requestCache = service.cache.get();
+        Map<String, CachedResult> map = service.map;
 
-        if (file.getModificationStamp() == requestCache.modificationStamp && file.equals(requestCache.virtualFile)) {
-            return requestCache.virtualFileKotlinClass;
-        }
-        else {
-            VirtualFileKotlinClass aClass = ApplicationManager.getApplication().runReadAction(new Computable<VirtualFileKotlinClass>() {
-                @Override
-                public VirtualFileKotlinClass compute() {
-                    //noinspection deprecation
-                    return VirtualFileKotlinClass.Factory.create(file);
+        String url = file.getUrl();
+        long timeStamp = file.getModificationStamp();
+
+        CachedResult result = map.get(url);
+        if (result != null && result.modificationStamp == timeStamp) {
+            VirtualFileKotlinClass cachedClass = result.kotlinClass;
+            if (cachedClass != null) {
+                if (file == cachedClass.getFile()) {
+                    return cachedClass;
                 }
-            });
-
-            return requestCache.cache(file, aClass);
+                else {
+                    return new VirtualFileKotlinClass(
+                            file, cachedClass.getClassId(), cachedClass.getClassHeader(), cachedClass.getInnerClasses()
+                    );
+                }
+            }
         }
+
+        VirtualFileKotlinClass kotlinClass = ApplicationManager.getApplication().runReadAction(new Computable<VirtualFileKotlinClass>() {
+            @SuppressWarnings("deprecation")
+            @Override
+            public VirtualFileKotlinClass compute() {
+                return VirtualFileKotlinClass.Factory.create(file);
+            }
+        });
+
+        map.put(url, new CachedResult(timeStamp, kotlinClass));
+
+        return kotlinClass;
     }
 
     @Override
     public void dispose() {
-        // This is only relevant for tests. We create a new instance of Application for each test, and so a new instance of this service is
-        // also created for each test. However all tests share the same event dispatch thread, which would collect all instances of this
-        // thread-local if they're not removed properly. Each instance would transitively retain VFS resulting in OutOfMemoryError
-        cache.remove();
+        map.clear();
     }
 }
