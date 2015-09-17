@@ -16,7 +16,6 @@
 
 package org.jetbrains.kotlin.load.kotlin
 
-import org.jetbrains.kotlin.load.kotlin.header.KotlinClassHeader
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.serialization.deserialization.ClassDataFinder
 import org.jetbrains.kotlin.serialization.deserialization.ClassDataProvider
@@ -32,7 +31,7 @@ public class JavaClassDataFinder(
             "Class with incorrect id found: expected $classId, actual ${kotlinJvmBinaryClass.getClassId()}"
         }
         val data = deserializedDescriptorResolver.readData(kotlinJvmBinaryClass, DeserializedDescriptorResolver.KOTLIN_CLASS) ?: return null
-        val classData = JvmProtoBufUtil.readClassDataFrom(data)
+        val classData = ProtoCache.INSTANCE.getClassData(kotlinJvmBinaryClass) { JvmProtoBufUtil.readClassDataFrom(data) }
         return ClassDataProvider(classData, KotlinJvmBinarySourceElement(kotlinJvmBinaryClass))
     }
 }

@@ -59,9 +59,14 @@ public final class DeserializedDescriptorResolver {
 
     @Nullable
     public ClassDescriptor resolveClass(@NotNull KotlinJvmBinaryClass kotlinClass) {
-        String[] data = readData(kotlinClass, KOTLIN_CLASS);
+        final String[] data = readData(kotlinClass, KOTLIN_CLASS);
         if (data != null) {
-            ClassData classData = JvmProtoBufUtil.readClassDataFrom(data);
+            ClassData classData = ProtoCache.INSTANCE.getClassData(kotlinClass, new Function0<ClassData>() {
+                @Override
+                public ClassData invoke() {
+                    return JvmProtoBufUtil.readClassDataFrom(data);
+                }
+            });
             KotlinJvmBinarySourceElement sourceElement = new KotlinJvmBinarySourceElement(kotlinClass);
             ClassDataProvider classDataProvider = new ClassDataProvider(classData, sourceElement);
             return components.getClassDeserializer().deserializeClass(kotlinClass.getClassId(), classDataProvider);
@@ -71,10 +76,15 @@ public final class DeserializedDescriptorResolver {
 
     @Nullable
     public JetScope createKotlinPackagePartScope(@NotNull PackageFragmentDescriptor descriptor, @NotNull KotlinJvmBinaryClass kotlinClass) {
-        String[] data = readData(kotlinClass, KOTLIN_FILE_FACADE_OR_MULTIFILE_CLASS_PART);
+        final String[] data = readData(kotlinClass, KOTLIN_FILE_FACADE_OR_MULTIFILE_CLASS_PART);
         if (data != null) {
             //all classes are included in java scope
-            PackageData packageData = JvmProtoBufUtil.readPackageDataFrom(data);
+            PackageData packageData = ProtoCache.INSTANCE.getPackageData(kotlinClass, new Function0<PackageData>() {
+                @Override
+                public PackageData invoke() {
+                    return JvmProtoBufUtil.readPackageDataFrom(data);
+                }
+            });
             return new DeserializedPackageMemberScope(
                     descriptor, packageData.getPackageProto(), packageData.getNameResolver(), components,
                     new Function0<Collection<Name>>() {
