@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.idea.decompiler.navigation.NavigateToDecompiledLibra
 import org.jetbrains.kotlin.load.java.JvmAbi
 import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinClass
 import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass
-import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.TRAIT_IMPL
+import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.INTERFACE_DEFAULT_IMPL
 import org.jetbrains.kotlin.load.kotlin.KotlinBinaryClassCache
 import org.jetbrains.kotlin.load.kotlin.header.KotlinClassHeader
 import org.junit.Assert
@@ -46,7 +46,7 @@ public abstract class AbstractInternalCompiledClassesTest : JetLightCodeInsightF
 
     protected fun doTestTraitImplClassIsVisibleAsJavaClass() {
         val project = getProject()
-        doTest("trait impl", isSyntheticClassOfKind(TRAIT_IMPL)) {
+        doTest("trait impl", isSyntheticClassOfKind(INTERFACE_DEFAULT_IMPL)) {
             val psiFile = PsiManager.getInstance(project).findFile(this)!!
             Assert.assertTrue("Should not be kotlin file",
                               psiFile !is JetClsFile)
@@ -58,7 +58,7 @@ public abstract class AbstractInternalCompiledClassesTest : JetLightCodeInsightF
                               decompiledPsiFile is PsiJavaFile)
             val classes = (decompiledPsiFile as PsiJavaFile).getClasses()
             Assert.assertTrue("Should have some decompiled text",
-                              classes.size() == 1 && classes[0].getName()!!.endsWith(JvmAbi.TRAIT_IMPL_SUFFIX))
+                              classes.size() == 1 && classes[0].getName()!!.endsWith(JvmAbi.INTERFACE_IMPL_SUFFIX))
         }
     }
 

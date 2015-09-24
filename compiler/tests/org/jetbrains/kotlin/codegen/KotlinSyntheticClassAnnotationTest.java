@@ -51,8 +51,8 @@ public class KotlinSyntheticClassAnnotationTest extends CodegenTestCase {
     public void testTraitImpl() {
         doTestKotlinSyntheticClass(
                 "interface A { fun foo() = 42 }",
-                JvmAbi.TRAIT_IMPL_SUFFIX,
-                TRAIT_IMPL
+                JvmAbi.INTERFACE_IMPL_SUFFIX,
+                INTERFACE_DEFAULT_IMPL
         );
     }
 
@@ -108,7 +108,7 @@ public class KotlinSyntheticClassAnnotationTest extends CodegenTestCase {
         doTestKotlinSyntheticClass(
                 "fun foo() { interface Local { fun bar() = 42 } }",
                 "Local$$TImpl.class",
-                LOCAL_TRAIT_IMPL
+                LOCAL_INTERFACE_DEFAULT_IMPL
         );
     }
 

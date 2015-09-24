@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.codegen.AsmUtil.writeKotlinSyntheticClassAnnotation
 import org.jetbrains.kotlin.codegen.context.ClassContext
 import org.jetbrains.kotlin.codegen.state.GenerationState
 import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.LOCAL_TRAIT_IMPL
-import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.TRAIT_IMPL
+import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.LOCAL_INTERFACE_DEFAULT_IMPL
+import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.INTERFACE_DEFAULT_IMPL
 import org.jetbrains.kotlin.load.java.descriptors.JavaMethodDescriptor
 import org.jetbrains.kotlin.psi.JetClassOrObject
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
@@ -132,7 +132,7 @@ public class TraitImplBodyCodegen(
     override fun generateKotlinAnnotation() {
         writeKotlinSyntheticClassAnnotation(
                 v,
-                if (DescriptorUtils.isTopLevelOrInnerClass(descriptor)) TRAIT_IMPL else LOCAL_TRAIT_IMPL
+                if (DescriptorUtils.isTopLevelOrInnerClass(descriptor)) INTERFACE_DEFAULT_IMPL else LOCAL_INTERFACE_DEFAULT_IMPL
         )
     }
 }

@@ -118,7 +118,7 @@ public object InlineTestUtil {
                                 val fromCall = MethodInfo(className, this.name, this.desc)
 
                                 //skip delegation to trait impl from child class
-                                if (methodCall.owner.endsWith(JvmAbi.TRAIT_IMPL_SUFFIX) && fromCall.owner != methodCall.owner) {
+                                if (methodCall.owner.endsWith(JvmAbi.INTERFACE_IMPL_SUFFIX) && fromCall.owner != methodCall.owner) {
                                     return
                                 }
                                 notInlined.add(NotInlinedCall(fromCall, methodCall))
@@ -187,7 +187,7 @@ public object InlineTestUtil {
     private fun isClassOrPackagePartKind(header: KotlinClassHeader): Boolean {
         return header.classKind == JvmAnnotationNames.KotlinClass.Kind.CLASS
                || header.syntheticClassKind == JvmAnnotationNames.KotlinSyntheticClass.Kind.PACKAGE_PART
-               || header.syntheticClassKind == JvmAnnotationNames.KotlinSyntheticClass.Kind.TRAIT_IMPL
+               || header.syntheticClassKind == JvmAnnotationNames.KotlinSyntheticClass.Kind.INTERFACE_DEFAULT_IMPL
     }
 
     private fun getClassHeader(file: OutputFile): KotlinClassHeader {

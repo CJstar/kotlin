@@ -43,8 +43,8 @@ public fun isKotlinJvmCompiledFile(file: VirtualFile): Boolean {
 
     val header = KotlinBinaryClassCache.getKotlinBinaryClass(file)?.getClassHeader()
     return header != null &&
-           header.syntheticClassKind != KotlinSyntheticClass.Kind.TRAIT_IMPL &&
-           header.syntheticClassKind != KotlinSyntheticClass.Kind.LOCAL_TRAIT_IMPL
+           header.syntheticClassKind != KotlinSyntheticClass.Kind.INTERFACE_DEFAULT_IMPL &&
+           header.syntheticClassKind != KotlinSyntheticClass.Kind.LOCAL_INTERFACE_DEFAULT_IMPL
 }
 
 public fun isKotlinJsMetaFile(file: VirtualFile): Boolean = file.getFileType() == KotlinJavaScriptMetaFileType
