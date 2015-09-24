@@ -623,7 +623,7 @@ public class JetTypeMapper {
             ownerForDefaultParam = mapClass(ownerForDefault);
             ownerForDefaultImpl = isInterface(ownerForDefault) ? mapTraitImpl(ownerForDefault) : ownerForDefaultParam;
 
-            if (isInterface && superCall) {
+            if (isInterface && (superCall || descriptor.getVisibility() == Visibilities.PRIVATE)) {
                 thisClass = mapClass(currentOwner);
                 if (declarationOwner instanceof JavaClassDescriptor) {
                     invokeOpcode = INVOKESPECIAL;
