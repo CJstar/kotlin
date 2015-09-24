@@ -1040,7 +1040,7 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
     }
 
     private void generatePrimaryConstructor(final DelegationFieldsInfo delegationFieldsInfo) {
-        if (isTrait(descriptor) || isAnnotationClass(descriptor)) return;
+        if (isInterface(descriptor) || isAnnotationClass(descriptor)) return;
 
         ConstructorDescriptor constructorDescriptor = descriptor.getUnsubstitutedPrimaryConstructor();
         if (constructorDescriptor == null) return;
@@ -1398,7 +1398,7 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
     }
 
     private void generateTraitMethods() {
-        if (isTrait(descriptor)) return;
+        if (isInterface(descriptor)) return;
 
         for (Map.Entry<FunctionDescriptor, FunctionDescriptor> entry : CodegenUtil.getTraitMethods(descriptor).entrySet()) {
             FunctionDescriptor traitFun = entry.getKey();
@@ -1417,7 +1417,7 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
                     @Override
                     public void doGenerateBody(@NotNull ExpressionCodegen codegen, @NotNull JvmMethodSignature signature) {
                         DeclarationDescriptor containingDeclaration = traitFun.getContainingDeclaration();
-                        if (!DescriptorUtils.isTrait(containingDeclaration)) return;
+                        if (!DescriptorUtils.isInterface(containingDeclaration)) return;
 
                         DeclarationDescriptor declarationInheritedFun = inheritedFun.getContainingDeclaration();
                         PsiElement classForInheritedFun = descriptorToDeclaration(declarationInheritedFun);

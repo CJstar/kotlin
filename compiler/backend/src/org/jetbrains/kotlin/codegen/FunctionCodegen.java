@@ -142,7 +142,7 @@ public class FunctionCodegen {
             @NotNull FunctionGenerationStrategy strategy
     ) {
         OwnerKind contextKind = methodContext.getContextKind();
-        if (isTrait(functionDescriptor.getContainingDeclaration()) &&
+        if (isInterface(functionDescriptor.getContainingDeclaration()) &&
             functionDescriptor.getVisibility() == Visibilities.PRIVATE &&
             contextKind != OwnerKind.INTERFACE_IMPL) {
             return;
@@ -503,7 +503,7 @@ public class FunctionCodegen {
     public void generateBridges(@NotNull FunctionDescriptor descriptor) {
         if (descriptor instanceof ConstructorDescriptor) return;
         if (owner.getContextKind() == OwnerKind.INTERFACE_IMPL) return;
-        if (isTrait(descriptor.getContainingDeclaration())) return;
+        if (isInterface(descriptor.getContainingDeclaration())) return;
 
         // equals(Any?), hashCode(), toString() never need bridges
         if (isMethodOfAny(descriptor)) return;
@@ -583,7 +583,7 @@ public class FunctionCodegen {
     ) {
         DeclarationDescriptor contextClass = owner.getContextDescriptor().getContainingDeclaration();
 
-        if (kind != OwnerKind.INTERFACE_IMPL && isTrait(contextClass)) {
+        if (kind != OwnerKind.INTERFACE_IMPL && isInterface(contextClass)) {
             return;
         }
 
