@@ -60,7 +60,7 @@ import java.util.Set;
 
 import static org.jetbrains.kotlin.builtins.KotlinBuiltIns.isBoolean;
 import static org.jetbrains.kotlin.builtins.KotlinBuiltIns.isPrimitiveClass;
-import static org.jetbrains.kotlin.codegen.JvmCodegenUtil.isInterface;
+import static org.jetbrains.kotlin.codegen.JvmCodegenUtil.isJvmInterface;
 import static org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass;
 import static org.jetbrains.kotlin.resolve.DescriptorUtils.*;
 import static org.jetbrains.kotlin.resolve.jvm.AsmTypes.*;
@@ -164,7 +164,7 @@ public class AsmUtil {
 
     public static boolean isAbstractMethod(FunctionDescriptor functionDescriptor, OwnerKind kind) {
         return (functionDescriptor.getModality() == Modality.ABSTRACT
-                || isInterface(functionDescriptor.getContainingDeclaration()))
+                || isJvmInterface(functionDescriptor.getContainingDeclaration()))
                && !isStaticMethod(kind, functionDescriptor);
     }
 
@@ -314,7 +314,7 @@ public class AsmUtil {
     private static Integer specialCaseVisibility(@NotNull MemberDescriptor memberDescriptor) {
         DeclarationDescriptor containingDeclaration = memberDescriptor.getContainingDeclaration();
         Visibility memberVisibility = memberDescriptor.getVisibility();
-        if (isInterface(containingDeclaration)) {
+        if (isJvmInterface(containingDeclaration)) {
             return memberVisibility == Visibilities.PRIVATE ? NO_FLAG_PACKAGE_PRIVATE : ACC_PUBLIC;
         }
 
@@ -346,7 +346,7 @@ public class AsmUtil {
 
         if (memberDescriptor instanceof CallableDescriptor && memberVisibility == Visibilities.PROTECTED) {
             for (CallableDescriptor overridden : DescriptorUtils.getAllOverriddenDescriptors((CallableDescriptor) memberDescriptor)) {
-                if (isInterface(overridden.getContainingDeclaration())) {
+                if (isJvmInterface(overridden.getContainingDeclaration())) {
                     return ACC_PUBLIC;
                 }
             }
