@@ -208,7 +208,7 @@ public abstract class MemberCodegen<T extends JetElement/* TODO: & JetDeclaratio
         new ImplementationBodyCodegen(aClass, classContext, classBuilder, state, parentCodegen).generate();
 
         if (aClass instanceof JetClass && ((JetClass) aClass).isInterface()) {
-            Type interfaceImplType = state.getTypeMapper().mapTraitImpl(descriptor);
+            Type interfaceImplType = state.getTypeMapper().mapInterfaceImpl(descriptor);
             ClassBuilder interfaceImplBuilder = state.getFactory().newVisitor(TraitImpl(aClass, descriptor), interfaceImplType, aClass.getContainingFile());
             ClassContext interfaceImplContext = parentContext.intoClass(descriptor, OwnerKind.INTERFACE_IMPL, state);
             new InterfaceImplBodyCodegen(aClass, interfaceImplContext, interfaceImplBuilder, state, parentCodegen).generate();
