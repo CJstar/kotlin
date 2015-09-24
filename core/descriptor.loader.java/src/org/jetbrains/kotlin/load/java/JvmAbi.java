@@ -36,7 +36,7 @@ public final class JvmAbi {
      */
     public static final BinaryVersion VERSION = BinaryVersion.create(0, 25, 0);
 
-    public static final String INTERFACE_IMPL_CLASS_NAME = "$TImpl";
+    public static final String INTERFACE_IMPL_CLASS_NAME = "DefaultImpls";
     public static final String INTERFACE_IMPL_SUFFIX = "$" + INTERFACE_IMPL_CLASS_NAME;
 
     public static final String DEFAULT_PARAMS_IMPL_SUFFIX = "$default";
