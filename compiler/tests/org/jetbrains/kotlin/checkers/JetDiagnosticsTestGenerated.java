@@ -6537,6 +6537,18 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("CheckJavaVisibility.kt")
+            public void testCheckJavaVisibility() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/CheckJavaVisibility.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("CheckVisibility.kt")
+            public void testCheckVisibility() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/CheckVisibility.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("ClassClash.kt")
             public void testClassClash() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/ClassClash.kt");
@@ -6591,6 +6603,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("ImportClassClash.kt")
+            public void testImportClassClash() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/ImportClassClash.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("ImportFromCurrentWithDifferentName.kt")
             public void testImportFromCurrentWithDifferentName() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/ImportFromCurrentWithDifferentName.kt");
@@ -6636,6 +6654,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
             @TestMetadata("ImportObjectHidesCurrentPackage.kt")
             public void testImportObjectHidesCurrentPackage() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/ImportObjectHidesCurrentPackage.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("ImportOverloadFunctions.kt")
+            public void testImportOverloadFunctions() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/imports/ImportOverloadFunctions.kt");
                 doTest(fileName);
             }
 
