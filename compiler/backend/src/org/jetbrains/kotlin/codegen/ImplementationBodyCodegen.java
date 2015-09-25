@@ -225,6 +225,8 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
 
         InlineCodegenUtil.initDefaultSourceMappingIfNeeded(context, this, state);
 
+        writeInnerInterfaceDefaultImplsIfNeeded();
+
         writeEnclosingMethod();
 
         AnnotationCodegen.forClass(v.getVisitor(), typeMapper).genAnnotations(descriptor, null);
@@ -232,6 +234,14 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
         generateReflectionObjectFieldIfNeeded();
 
         generateEnumEntries();
+    }
+
+    private void writeInnerInterfaceDefaultImplsIfNeeded() {
+        if (myClass instanceof JetClass && ((JetClass) myClass).isInterface()) {
+            Type implType = typeMapper.mapInterfaceImpl(descriptor);
+            v.visitInnerClass(implType.getInternalName(), signature().getName(), JvmAbi.INTERFACE_IMPL_CLASS_NAME,
+                              InterfaceImplBodyCodegen.INTERFACE_DEFAULT_IMPL_CLASS_ACCESS);
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.codegen.AsmUtil.writeKotlinSyntheticClassAnnotation
 import org.jetbrains.kotlin.codegen.context.ClassContext
 import org.jetbrains.kotlin.codegen.state.GenerationState
 import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.load.java.JvmAbi
 import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.LOCAL_INTERFACE_DEFAULT_IMPL
 import org.jetbrains.kotlin.load.java.JvmAnnotationNames.KotlinSyntheticClass.Kind.INTERFACE_DEFAULT_IMPL
 import org.jetbrains.kotlin.load.java.descriptors.JavaMethodDescriptor
@@ -31,9 +32,9 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DelegationToTraitImpl
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodSignature
-import org.jetbrains.org.objectweb.asm.Opcodes.ACC_FINAL
-import org.jetbrains.org.objectweb.asm.Opcodes.ACC_PUBLIC
+import org.jetbrains.org.objectweb.asm.Opcodes.*
 import org.jetbrains.org.objectweb.asm.Opcodes.V1_6
+
 
 public class InterfaceImplBodyCodegen(
         aClass: JetClassOrObject,
@@ -43,13 +44,21 @@ public class InterfaceImplBodyCodegen(
         parentCodegen: MemberCodegen<*>?
 ) : ClassBodyCodegen(aClass, context, v, state, parentCodegen) {
 
+    companion object {
+        const val INTERFACE_DEFAULT_IMPL_CLASS_ACCESS = ACC_PUBLIC or ACC_FINAL or ACC_STATIC
+    }
+
     override fun generateDeclaration() {
+        val implInternalName = typeMapper.mapInterfaceImpl(descriptor).internalName
         v.defineClass(
-                myClass, V1_6, ACC_PUBLIC or ACC_FINAL,
-                typeMapper.mapInterfaceImpl(descriptor).getInternalName(),
+                myClass, V1_6, INTERFACE_DEFAULT_IMPL_CLASS_ACCESS,
+                implInternalName,
                 null, "java/lang/Object", ArrayUtil.EMPTY_STRING_ARRAY
         )
         v.visitSource(myClass.getContainingFile().getName(), null)
+        v.visitInnerClass(implInternalName,
+                          typeMapper.mapClass(descriptor).internalName,
+                          JvmAbi.INTERFACE_IMPL_CLASS_NAME, INTERFACE_DEFAULT_IMPL_CLASS_ACCESS)
     }
 
     override fun generateSyntheticParts() {
