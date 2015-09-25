@@ -205,8 +205,13 @@ public class DefaultErrorMessages {
         MAP.put(DELEGATED_PROPERTY_IN_TRAIT, "Delegated properties are not allowed in interfaces");
         MAP.put(LOCAL_VARIABLE_WITH_DELEGATE, "Local variables are not allowed to have delegates");
 
+        MAP.put(INAPPLICABLE_LATEINIT_MODIFIER, "''lateinit'' modifier is allowed only on member properties with a backing field");
+        MAP.put(INAPPLICABLE_LATEINIT_MODIFIER_IMMUTABLE, "''lateinit'' modifier is allowed only on mutable properties");
+        MAP.put(INAPPLICABLE_LATEINIT_MODIFIER_ABSTRACT_PROPERTY, "''lateinit'' modifier is not allowed on abstract properties");
+        MAP.put(INAPPLICABLE_LATEINIT_MODIFIER_PRIMARY_CONSTRUCTOR_PARAMETER, "''lateinit'' modifier is not allowed on primary constructor parameters");
+        MAP.put(INAPPLICABLE_LATEINIT_MODIFIER_NULLABLE, "''lateinit'' modifier is not allowed on nullable properties");
+
         MAP.put(GETTER_VISIBILITY_DIFFERS_FROM_PROPERTY_VISIBILITY, "Getter visibility must be the same as property visibility");
-        MAP.put(INAPPLICABLE_LATEINIT_MODIFIER, "''lateinit'' modifier is allowed only on non-null member properties with a backing field");
         MAP.put(BACKING_FIELD_IN_TRAIT, "Property in an interface cannot have a backing field");
         MAP.put(MUST_BE_INITIALIZED, "Property must be initialized");
         MAP.put(MUST_BE_INITIALIZED_OR_BE_ABSTRACT, "Property must be initialized or be abstract");
@@ -353,6 +358,10 @@ public class DefaultErrorMessages {
         MAP.put(COMPARE_TO_TYPE_MISMATCH, "''compareTo()'' must return kotlin.Int, but returns {0}", RENDER_TYPE);
 
         MAP.put(UNDESCORE_IS_DEPRECATED, "Names _, __, ___, ..., are deprecated");
+
+        MAP.put(INAPPLICABLE_OPERATOR_MODIFIER, "'operator' modifier is inapplicable on this function");
+
+        MAP.put(OPERATOR_MODIFIER_REQUIRED, "'operator' modifier is required on ''{0}'' in ''{1}''", NAME, STRING);
 
         MAP.put(RETURN_IN_FUNCTION_WITH_EXPRESSION_BODY,
                 "Returns are not allowed for functions with expression body. Use block body in '{...}'");
@@ -647,7 +656,7 @@ public class DefaultErrorMessages {
         MAP.put(NON_LOCAL_RETURN_NOT_ALLOWED, "Can''t inline ''{0}'' here: it may contain non-local returns. Add ''crossinline'' modifier to parameter declaration ''{0}''", ELEMENT_TEXT, SHORT_NAMES_IN_TYPES, SHORT_NAMES_IN_TYPES);
         MAP.put(INLINE_CALL_CYCLE, "The ''{0}'' invocation is a part of inline cycle", NAME);
         MAP.put(NON_LOCAL_RETURN_IN_DISABLED_INLINE, "Non-local returns are not allowed with inlining disabled");
-        MAP.put(ACCESS_TO_PRIVATE_TOP_LEVEL_FROM_ANOTHER_FILE, "Access to private top-level declarations from another file will soon be forbidden: ''{0}'' is ''{1}'' in ''{2}''", NAME, TO_STRING, RENDER_FILE);
+        MAP.put(ACCESS_TO_PRIVATE_TOP_LEVEL_FROM_ANOTHER_FILE, "Cannot access ''{0}'': it is ''{1}'' in ''{2}''", NAME, TO_STRING, RENDER_FILE);
 
         MAP.setImmutable();
 

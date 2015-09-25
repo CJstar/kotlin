@@ -1,3 +1,6 @@
+@file:kotlin.jvm.JvmMultifileClass
+@file:kotlin.jvm.JvmName("RangesKt")
+
 package kotlin
 
 //
@@ -5,7 +8,6 @@ package kotlin
 // See: https://github.com/JetBrains/kotlin/tree/master/libraries/stdlib
 //
 
-import kotlin.platform.*
 import java.util.*
 
 import java.util.Collections // TODO: it's temporary while we have java.util.Collections in js
@@ -14,7 +16,7 @@ import java.util.Collections // TODO: it's temporary while we have java.util.Col
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("intRangeContains")
-public fun Range<Int>.contains(item: Byte): Boolean {
+public operator fun Range<Int>.contains(item: Byte): Boolean {
     return start <= item && item <= end
 }
 
@@ -22,7 +24,7 @@ public fun Range<Int>.contains(item: Byte): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("longRangeContains")
-public fun Range<Long>.contains(item: Byte): Boolean {
+public operator fun Range<Long>.contains(item: Byte): Boolean {
     return start <= item && item <= end
 }
 
@@ -30,7 +32,7 @@ public fun Range<Long>.contains(item: Byte): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("shortRangeContains")
-public fun Range<Short>.contains(item: Byte): Boolean {
+public operator fun Range<Short>.contains(item: Byte): Boolean {
     return start <= item && item <= end
 }
 
@@ -38,7 +40,7 @@ public fun Range<Short>.contains(item: Byte): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("doubleRangeContains")
-public fun Range<Double>.contains(item: Byte): Boolean {
+public operator fun Range<Double>.contains(item: Byte): Boolean {
     return start <= item && item <= end
 }
 
@@ -46,42 +48,42 @@ public fun Range<Double>.contains(item: Byte): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("floatRangeContains")
-public fun Range<Float>.contains(item: Byte): Boolean {
+public operator fun Range<Float>.contains(item: Byte): Boolean {
     return start <= item && item <= end
 }
 
 @Deprecated("The 'contains' operation for a range of Char and Byte item is not supported and should not be used.")
-public fun CharRange.contains(item: Byte): Nothing {
+public operator fun CharRange.contains(item: Byte): Nothing {
     throw UnsupportedOperationException()
 }
 
 @Deprecated("The 'contains' operation for a range of Int and Char item is not supported and should not be used.")
-public fun IntRange.contains(item: Char): Nothing {
+public operator fun IntRange.contains(item: Char): Nothing {
     throw UnsupportedOperationException()
 }
 
 @Deprecated("The 'contains' operation for a range of Long and Char item is not supported and should not be used.")
-public fun LongRange.contains(item: Char): Nothing {
+public operator fun LongRange.contains(item: Char): Nothing {
     throw UnsupportedOperationException()
 }
 
 @Deprecated("The 'contains' operation for a range of Byte and Char item is not supported and should not be used.")
-public fun ByteRange.contains(item: Char): Nothing {
+public operator fun ByteRange.contains(item: Char): Nothing {
     throw UnsupportedOperationException()
 }
 
 @Deprecated("The 'contains' operation for a range of Short and Char item is not supported and should not be used.")
-public fun ShortRange.contains(item: Char): Nothing {
+public operator fun ShortRange.contains(item: Char): Nothing {
     throw UnsupportedOperationException()
 }
 
 @Deprecated("The 'contains' operation for a range of Double and Char item is not supported and should not be used.")
-public fun DoubleRange.contains(item: Char): Nothing {
+public operator fun DoubleRange.contains(item: Char): Nothing {
     throw UnsupportedOperationException()
 }
 
 @Deprecated("The 'contains' operation for a range of Float and Char item is not supported and should not be used.")
-public fun FloatRange.contains(item: Char): Nothing {
+public operator fun FloatRange.contains(item: Char): Nothing {
     throw UnsupportedOperationException()
 }
 
@@ -89,7 +91,7 @@ public fun FloatRange.contains(item: Char): Nothing {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("intRangeContains")
-public fun Range<Int>.contains(item: Double): Boolean {
+public operator fun Range<Int>.contains(item: Double): Boolean {
     return start <= item && item <= end
 }
 
@@ -97,7 +99,7 @@ public fun Range<Int>.contains(item: Double): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("longRangeContains")
-public fun Range<Long>.contains(item: Double): Boolean {
+public operator fun Range<Long>.contains(item: Double): Boolean {
     return start <= item && item <= end
 }
 
@@ -105,7 +107,7 @@ public fun Range<Long>.contains(item: Double): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("byteRangeContains")
-public fun Range<Byte>.contains(item: Double): Boolean {
+public operator fun Range<Byte>.contains(item: Double): Boolean {
     return start <= item && item <= end
 }
 
@@ -113,7 +115,7 @@ public fun Range<Byte>.contains(item: Double): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("shortRangeContains")
-public fun Range<Short>.contains(item: Double): Boolean {
+public operator fun Range<Short>.contains(item: Double): Boolean {
     return start <= item && item <= end
 }
 
@@ -121,12 +123,12 @@ public fun Range<Short>.contains(item: Double): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("floatRangeContains")
-public fun Range<Float>.contains(item: Double): Boolean {
+public operator fun Range<Float>.contains(item: Double): Boolean {
     return start <= item && item <= end
 }
 
 @Deprecated("The 'contains' operation for a range of Char and Double item is not supported and should not be used.")
-public fun CharRange.contains(item: Double): Nothing {
+public operator fun CharRange.contains(item: Double): Nothing {
     throw UnsupportedOperationException()
 }
 
@@ -134,7 +136,7 @@ public fun CharRange.contains(item: Double): Nothing {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("intRangeContains")
-public fun Range<Int>.contains(item: Float): Boolean {
+public operator fun Range<Int>.contains(item: Float): Boolean {
     return start <= item && item <= end
 }
 
@@ -142,7 +144,7 @@ public fun Range<Int>.contains(item: Float): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("longRangeContains")
-public fun Range<Long>.contains(item: Float): Boolean {
+public operator fun Range<Long>.contains(item: Float): Boolean {
     return start <= item && item <= end
 }
 
@@ -150,7 +152,7 @@ public fun Range<Long>.contains(item: Float): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("byteRangeContains")
-public fun Range<Byte>.contains(item: Float): Boolean {
+public operator fun Range<Byte>.contains(item: Float): Boolean {
     return start <= item && item <= end
 }
 
@@ -158,7 +160,7 @@ public fun Range<Byte>.contains(item: Float): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("shortRangeContains")
-public fun Range<Short>.contains(item: Float): Boolean {
+public operator fun Range<Short>.contains(item: Float): Boolean {
     return start <= item && item <= end
 }
 
@@ -166,12 +168,12 @@ public fun Range<Short>.contains(item: Float): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("doubleRangeContains")
-public fun Range<Double>.contains(item: Float): Boolean {
+public operator fun Range<Double>.contains(item: Float): Boolean {
     return start <= item && item <= end
 }
 
 @Deprecated("The 'contains' operation for a range of Char and Float item is not supported and should not be used.")
-public fun CharRange.contains(item: Float): Nothing {
+public operator fun CharRange.contains(item: Float): Nothing {
     throw UnsupportedOperationException()
 }
 
@@ -179,7 +181,7 @@ public fun CharRange.contains(item: Float): Nothing {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("longRangeContains")
-public fun Range<Long>.contains(item: Int): Boolean {
+public operator fun Range<Long>.contains(item: Int): Boolean {
     return start <= item && item <= end
 }
 
@@ -187,7 +189,7 @@ public fun Range<Long>.contains(item: Int): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("byteRangeContains")
-public fun Range<Byte>.contains(item: Int): Boolean {
+public operator fun Range<Byte>.contains(item: Int): Boolean {
     return start <= item && item <= end
 }
 
@@ -195,7 +197,7 @@ public fun Range<Byte>.contains(item: Int): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("shortRangeContains")
-public fun Range<Short>.contains(item: Int): Boolean {
+public operator fun Range<Short>.contains(item: Int): Boolean {
     return start <= item && item <= end
 }
 
@@ -203,7 +205,7 @@ public fun Range<Short>.contains(item: Int): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("doubleRangeContains")
-public fun Range<Double>.contains(item: Int): Boolean {
+public operator fun Range<Double>.contains(item: Int): Boolean {
     return start <= item && item <= end
 }
 
@@ -211,12 +213,12 @@ public fun Range<Double>.contains(item: Int): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("floatRangeContains")
-public fun Range<Float>.contains(item: Int): Boolean {
+public operator fun Range<Float>.contains(item: Int): Boolean {
     return start <= item && item <= end
 }
 
 @Deprecated("The 'contains' operation for a range of Char and Int item is not supported and should not be used.")
-public fun CharRange.contains(item: Int): Nothing {
+public operator fun CharRange.contains(item: Int): Nothing {
     throw UnsupportedOperationException()
 }
 
@@ -224,7 +226,7 @@ public fun CharRange.contains(item: Int): Nothing {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("intRangeContains")
-public fun Range<Int>.contains(item: Long): Boolean {
+public operator fun Range<Int>.contains(item: Long): Boolean {
     return start <= item && item <= end
 }
 
@@ -232,7 +234,7 @@ public fun Range<Int>.contains(item: Long): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("byteRangeContains")
-public fun Range<Byte>.contains(item: Long): Boolean {
+public operator fun Range<Byte>.contains(item: Long): Boolean {
     return start <= item && item <= end
 }
 
@@ -240,7 +242,7 @@ public fun Range<Byte>.contains(item: Long): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("shortRangeContains")
-public fun Range<Short>.contains(item: Long): Boolean {
+public operator fun Range<Short>.contains(item: Long): Boolean {
     return start <= item && item <= end
 }
 
@@ -248,7 +250,7 @@ public fun Range<Short>.contains(item: Long): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("doubleRangeContains")
-public fun Range<Double>.contains(item: Long): Boolean {
+public operator fun Range<Double>.contains(item: Long): Boolean {
     return start <= item && item <= end
 }
 
@@ -256,12 +258,12 @@ public fun Range<Double>.contains(item: Long): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("floatRangeContains")
-public fun Range<Float>.contains(item: Long): Boolean {
+public operator fun Range<Float>.contains(item: Long): Boolean {
     return start <= item && item <= end
 }
 
 @Deprecated("The 'contains' operation for a range of Char and Long item is not supported and should not be used.")
-public fun CharRange.contains(item: Long): Nothing {
+public operator fun CharRange.contains(item: Long): Nothing {
     throw UnsupportedOperationException()
 }
 
@@ -269,7 +271,7 @@ public fun CharRange.contains(item: Long): Nothing {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("intRangeContains")
-public fun Range<Int>.contains(item: Short): Boolean {
+public operator fun Range<Int>.contains(item: Short): Boolean {
     return start <= item && item <= end
 }
 
@@ -277,7 +279,7 @@ public fun Range<Int>.contains(item: Short): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("longRangeContains")
-public fun Range<Long>.contains(item: Short): Boolean {
+public operator fun Range<Long>.contains(item: Short): Boolean {
     return start <= item && item <= end
 }
 
@@ -285,7 +287,7 @@ public fun Range<Long>.contains(item: Short): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("byteRangeContains")
-public fun Range<Byte>.contains(item: Short): Boolean {
+public operator fun Range<Byte>.contains(item: Short): Boolean {
     return start <= item && item <= end
 }
 
@@ -293,7 +295,7 @@ public fun Range<Byte>.contains(item: Short): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("doubleRangeContains")
-public fun Range<Double>.contains(item: Short): Boolean {
+public operator fun Range<Double>.contains(item: Short): Boolean {
     return start <= item && item <= end
 }
 
@@ -301,12 +303,12 @@ public fun Range<Double>.contains(item: Short): Boolean {
  * Checks if the specified [item] belongs to this range.
  */
 @kotlin.jvm.JvmName("floatRangeContains")
-public fun Range<Float>.contains(item: Short): Boolean {
+public operator fun Range<Float>.contains(item: Short): Boolean {
     return start <= item && item <= end
 }
 
 @Deprecated("The 'contains' operation for a range of Char and Short item is not supported and should not be used.")
-public fun CharRange.contains(item: Short): Nothing {
+public operator fun CharRange.contains(item: Short): Nothing {
     throw UnsupportedOperationException()
 }
 
@@ -968,5 +970,299 @@ public fun Short.until(to: Short): ShortRange {
     val to_  = (to - 1).toShort()
     if (to_ > to) throw IllegalArgumentException("The to argument value '$to' was too small.")
     return this .. to_
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun <T: Comparable<T>> T.coerceAtLeast(minimumValue: T): T {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun Byte.coerceAtLeast(minimumValue: Byte): Byte {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun Double.coerceAtLeast(minimumValue: Double): Double {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun Float.coerceAtLeast(minimumValue: Float): Float {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun Int.coerceAtLeast(minimumValue: Int): Int {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun Long.coerceAtLeast(minimumValue: Long): Long {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not less than the specified [minimumValue].
+ * @return this value if it's greater than or equal to the [minimumValue] or the [minimumValue] otherwise.
+ */
+public fun Short.coerceAtLeast(minimumValue: Short): Short {
+    return if (this < minimumValue) minimumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun <T: Comparable<T>> T.coerceAtMost(maximumValue: T): T {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun Byte.coerceAtMost(maximumValue: Byte): Byte {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun Double.coerceAtMost(maximumValue: Double): Double {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun Float.coerceAtMost(maximumValue: Float): Float {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun Int.coerceAtMost(maximumValue: Int): Int {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun Long.coerceAtMost(maximumValue: Long): Long {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value is not greater than the specified [maximumValue].
+ * @return this value if it's greater than or equal to the [maximumValue] or the [maximumValue] otherwise.
+ */
+public fun Short.coerceAtMost(maximumValue: Short): Short {
+    return if (this > maximumValue) maximumValue else this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun <T: Comparable<T>> T.coerceIn(minimumValue: T?, maximumValue: T?): T {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun Byte.coerceIn(minimumValue: Byte?, maximumValue: Byte?): Byte {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun Double.coerceIn(minimumValue: Double?, maximumValue: Double?): Double {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun Float.coerceIn(minimumValue: Float?, maximumValue: Float?): Float {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun Int.coerceIn(minimumValue: Int?, maximumValue: Int?): Int {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun Long.coerceIn(minimumValue: Long?, maximumValue: Long?): Long {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified range [minimumValue]..[maximumValue].
+ * @return this value if it's in the range, or [minimumValue] if this value is less than [minimumValue], or [maximumValue] if this value is greater than [maximumValue].
+ */
+public fun Short.coerceIn(minimumValue: Short?, maximumValue: Short?): Short {
+    if (minimumValue !== null && maximumValue !== null) {
+        if (minimumValue > maximumValue) throw IllegalArgumentException("Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue.")
+        if (this < minimumValue) return minimumValue
+        if (this > maximumValue) return maximumValue
+    }
+    else {
+        if (minimumValue !== null && this < minimumValue) return minimumValue
+        if (maximumValue !== null && this > maximumValue) return maximumValue
+    }
+    return this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun <T: Comparable<T>> T.coerceIn(range: Range<T>): T {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun Byte.coerceIn(range: Range<Byte>): Byte {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun Double.coerceIn(range: Range<Double>): Double {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun Float.coerceIn(range: Range<Float>): Float {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun Int.coerceIn(range: Range<Int>): Int {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun Long.coerceIn(range: Range<Long>): Long {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
+}
+
+/**
+ * Ensures that this value lies in the specified [range].
+ * @return this value if it's in the [range], or range.start if this value is less than range.start, or range.end if this value is greater than range.end.
+ */
+public fun Short.coerceIn(range: Range<Short>): Short {
+    if (range.isEmpty()) throw IllegalArgumentException("Cannot coerce value to an empty range: $range.")
+    return if (this < range.start) range.start else if (this > range.end) range.end else this
 }
 

@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+@file:kotlin.jvm.JvmMultifileClass
+@file:kotlin.jvm.JvmName("CharsKt")
+
 package kotlin
 
 /**
  * Concatenates this Char and a String.
  */
-public fun Char.plus(string: String) : String = this.toString() + string
+public operator fun Char.plus(string: String) : String = this.toString() + string
 
 /**
  * Returns `true` if this character is equal to the [other] character, optionally ignoring character case.

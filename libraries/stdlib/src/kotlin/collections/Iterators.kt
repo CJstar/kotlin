@@ -1,3 +1,6 @@
+@file:kotlin.jvm.JvmMultifileClass
+@file:kotlin.jvm.JvmName("CollectionsKt")
+
 package kotlin
 
 import java.util.Enumeration
@@ -5,7 +8,7 @@ import java.util.Enumeration
 /**
  * Creates an [Iterator] for an [Enumeration], allowing to use it in `for` loops.
  */
-public fun <T> Enumeration<T>.iterator(): Iterator<T> = object : Iterator<T> {
+public operator fun <T> Enumeration<T>.iterator(): Iterator<T> = object : Iterator<T> {
     override fun hasNext(): Boolean = hasMoreElements()
 
     public override fun next(): T = nextElement()
@@ -14,7 +17,7 @@ public fun <T> Enumeration<T>.iterator(): Iterator<T> = object : Iterator<T> {
 /**
  * Returns the given iterator itself. This allows to use an instance of iterator in a `for` loop.
  */
-public fun <T> Iterator<T>.iterator(): Iterator<T> = this
+public operator fun <T> Iterator<T>.iterator(): Iterator<T> = this
 
 /**
  * Performs the given [operation] on each element of this [Iterator].

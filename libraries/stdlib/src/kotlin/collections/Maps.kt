@@ -1,3 +1,6 @@
+@file:kotlin.jvm.JvmMultifileClass
+@file:kotlin.jvm.JvmName("MapsKt")
+
 package kotlin
 
 import java.io.Serializable
@@ -37,6 +40,13 @@ public fun mapOf<K, V>(vararg values: Pair<K, V>): Map<K, V> = if (values.size()
 public fun mapOf<K, V>(): Map<K, V> = emptyMap()
 
 /**
+ * Returns an immutable map, mapping only the specified key to the
+ * specified value.  The returned map is serializable.
+ */
+@JvmVersion
+public fun mapOf<K, V>(keyValuePair: Pair<K, V>): Map<K, V> = Collections.singletonMap(keyValuePair.first, keyValuePair.second)
+
+/**
  * Returns a new [HashMap] with the specified contents, given as a list of pairs
  * where the first component is the key and the second is the value.
  *
@@ -69,7 +79,7 @@ public fun <K, V> linkedMapOf(vararg values: Pair<K, V>): LinkedHashMap<K, V> {
 
 private val INT_MAX_POWER_OF_TWO: Int = Int.MAX_VALUE / 2 + 1
 
-private fun mapCapacity(expectedSize: Int): Int {
+internal fun mapCapacity(expectedSize: Int): Int {
     if (expectedSize < 3) {
         return expectedSize + 1
     }
@@ -91,7 +101,7 @@ public fun <K,V> Map<K,V>?.orEmpty() : Map<K,V> = this ?: emptyMap()
  * Checks if the map contains the given key. This method allows to use the `x in map` syntax for checking
  * whether an object is contained in the map.
  */
-public fun <K,V> Map<K,V>.contains(key : K) : Boolean = containsKey(key)
+public operator fun <K,V> Map<K,V>.contains(key : K) : Boolean = containsKey(key)
 
 /**
  * Allows to access the key of a map entry as a property. Equivalent to `getKey()`.
@@ -115,7 +125,7 @@ public val <K, V> Map.Entry<K, V>.value: V
  * }
  * ```
  */
-public fun <K, V> Map.Entry<K, V>.component1(): K {
+public operator fun <K, V> Map.Entry<K, V>.component1(): K {
     return getKey()
 }
 
@@ -128,7 +138,7 @@ public fun <K, V> Map.Entry<K, V>.component1(): K {
  * }
  * ```
  */
-public fun <K, V> Map.Entry<K, V>.component2(): V {
+public operator fun <K, V> Map.Entry<K, V>.component2(): V {
     return getValue()
 }
 
@@ -175,7 +185,7 @@ public inline fun <K, V> MutableMap<K, V>.getOrPut(key: K, defaultValue: () -> V
  *
  * @sample test.collections.MapTest.iterateWithProperties
  */
-public fun <K, V> Map<K, V>.iterator(): Iterator<Map.Entry<K, V>> {
+public operator fun <K, V> Map<K, V>.iterator(): Iterator<Map.Entry<K, V>> {
     val entrySet = entrySet()
     return entrySet.iterator()
 }
@@ -362,7 +372,7 @@ public fun <K, V> Map<K, V>.toLinkedMap(): MutableMap<K, V> = LinkedHashMap(this
 /**
  * Creates a new read-only map by replacing or adding an entry to this map from a given key-value [pair].
  */
-public fun <K, V> Map<K, V>.plus(pair: Pair<K, V>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.plus(pair: Pair<K, V>): Map<K, V> {
     val newMap = this.toLinkedMap()
     newMap.put(pair.first, pair.second)
     return newMap
@@ -371,7 +381,7 @@ public fun <K, V> Map<K, V>.plus(pair: Pair<K, V>): Map<K, V> {
 /**
  * Creates a new read-only map by replacing or adding entries to this map from a given collection of key-value [pairs].
  */
-public fun <K, V> Map<K, V>.plus(pairs: Iterable<Pair<K, V>>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.plus(pairs: Iterable<Pair<K, V>>): Map<K, V> {
     val newMap = this.toLinkedMap()
     newMap.putAll(pairs)
     return newMap
@@ -380,7 +390,7 @@ public fun <K, V> Map<K, V>.plus(pairs: Iterable<Pair<K, V>>): Map<K, V> {
 /**
  * Creates a new read-only map by replacing or adding entries to this map from a given array of key-value [pairs].
  */
-public fun <K, V> Map<K, V>.plus(pairs: Array<Pair<K, V>>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.plus(pairs: Array<Pair<K, V>>): Map<K, V> {
     val newMap = this.toLinkedMap()
     newMap.putAll(*pairs)
     return newMap
@@ -389,7 +399,7 @@ public fun <K, V> Map<K, V>.plus(pairs: Array<Pair<K, V>>): Map<K, V> {
 /**
  * Creates a new read-only map by replacing or adding entries to this map from a given sequence of key-value [pairs].
  */
-public fun <K, V> Map<K, V>.plus(pairs: Sequence<Pair<K, V>>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.plus(pairs: Sequence<Pair<K, V>>): Map<K, V> {
     val newMap = this.toLinkedMap()
     newMap.putAll(pairs)
     return newMap
@@ -398,7 +408,7 @@ public fun <K, V> Map<K, V>.plus(pairs: Sequence<Pair<K, V>>): Map<K, V> {
 /**
  * Creates a new read-only map by replacing or adding entries to this map from another [map].
  */
-public fun <K, V> Map<K, V>.plus(map: Map<K, V>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.plus(map: Map<K, V>): Map<K, V> {
     val newMap = this.toLinkedMap()
     newMap.putAll(map)
     return newMap
@@ -407,42 +417,42 @@ public fun <K, V> Map<K, V>.plus(map: Map<K, V>): Map<K, V> {
 /**
  * Appends or replaces the given [pair] in this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.plusAssign(pair: Pair<K, V>) {
+public operator fun <K, V> MutableMap<K, V>.plusAssign(pair: Pair<K, V>) {
     put(pair.first, pair.second)
 }
 
 /**
  * Appends or replaces all pairs from the given collection of [pairs] in this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.plusAssign(pairs: Iterable<Pair<K, V>>) {
+public operator fun <K, V> MutableMap<K, V>.plusAssign(pairs: Iterable<Pair<K, V>>) {
     putAll(pairs)
 }
 
 /**
  * Appends or replaces all pairs from the given array of [pairs] in this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.plusAssign(pairs: Array<Pair<K, V>>) {
+public operator fun <K, V> MutableMap<K, V>.plusAssign(pairs: Array<Pair<K, V>>) {
     putAll(*pairs)
 }
 
 /**
  * Appends or replaces all pairs from the given sequence of [pairs] in this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.plusAssign(pairs: Sequence<Pair<K, V>>) {
+public operator fun <K, V> MutableMap<K, V>.plusAssign(pairs: Sequence<Pair<K, V>>) {
     putAll(pairs)
 }
 
 /**
  * Appends or replaces all entries from the given [map] in this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.plusAssign(map: Map<K, V>) {
+public operator fun <K, V> MutableMap<K, V>.plusAssign(map: Map<K, V>) {
     putAll(map)
 }
 
 /**
  * Creates a new read-only map by removing a [key] from this map.
  */
-public fun <K, V> Map<K, V>.minus(key: K): Map<K, V> {
+public operator fun <K, V> Map<K, V>.minus(key: K): Map<K, V> {
     val result = LinkedHashMap<K, V>(this)
     result.minusAssign(key)
     return result
@@ -451,7 +461,7 @@ public fun <K, V> Map<K, V>.minus(key: K): Map<K, V> {
 /**
  * Creates a new read-only map by removing a collection of [keys] from this map.
  */
-public fun <K, V> Map<K, V>.minus(keys: Iterable<K>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.minus(keys: Iterable<K>): Map<K, V> {
     val result = LinkedHashMap<K, V>(this)
     result.minusAssign(keys)
     return result
@@ -460,7 +470,7 @@ public fun <K, V> Map<K, V>.minus(keys: Iterable<K>): Map<K, V> {
 /**
  * Creates a new read-only map by removing a array of [keys] from this map.
  */
-public fun <K, V> Map<K, V>.minus(keys: Array<K>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.minus(keys: Array<K>): Map<K, V> {
     val result = LinkedHashMap<K, V>(this)
     result.minusAssign(keys)
     return result
@@ -469,7 +479,7 @@ public fun <K, V> Map<K, V>.minus(keys: Array<K>): Map<K, V> {
 /**
  * Creates a new read-only map by removing a sequence of [keys] from this map.
  */
-public fun <K, V> Map<K, V>.minus(keys: Sequence<K>): Map<K, V> {
+public operator fun <K, V> Map<K, V>.minus(keys: Sequence<K>): Map<K, V> {
     val result = LinkedHashMap<K, V>(this)
     result.minusAssign(keys)
     return result
@@ -478,27 +488,27 @@ public fun <K, V> Map<K, V>.minus(keys: Sequence<K>): Map<K, V> {
 /**
  * Removes the given [key] from this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.minusAssign(key: K) {
+public operator fun <K, V> MutableMap<K, V>.minusAssign(key: K) {
     remove(key)
 }
 
 /**
  * Removes all the given [keys] from this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.minusAssign(keys: Iterable<K>) {
+public operator fun <K, V> MutableMap<K, V>.minusAssign(keys: Iterable<K>) {
     for (key in keys) remove(key)
 }
 
 /**
  * Removes all the given [keys] from this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.minusAssign(keys: Array<K>) {
+public operator fun <K, V> MutableMap<K, V>.minusAssign(keys: Array<K>) {
     for (key in keys) remove(key)
 }
 
 /**
  * Removes all the given [keys] from this mutable map.
  */
-public fun <K, V> MutableMap<K, V>.minusAssign(keys: Sequence<K>) {
+public operator fun <K, V> MutableMap<K, V>.minusAssign(keys: Sequence<K>) {
     for (key in keys) remove(key)
 }
