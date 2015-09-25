@@ -343,6 +343,18 @@ public class KotlinSteppingTestGenerated extends AbstractKotlinSteppingTest {
             doStepOverTest(fileName);
         }
 
+        @TestMetadata("stepOverIfWithInline.kt")
+        public void testStepOverIfWithInline() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverIfWithInline.kt");
+            doStepOverTest(fileName);
+        }
+
+        @TestMetadata("stepOverInlineFunctionInReturn.kt")
+        public void testStepOverInlineFunctionInReturn() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverInlineFunctionInReturn.kt");
+            doStepOverTest(fileName);
+        }
+
         @TestMetadata("stepOverInlinedLambda.kt")
         public void testStepOverInlinedLambda() throws Exception {
             String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverInlinedLambda.kt");
@@ -355,9 +367,33 @@ public class KotlinSteppingTestGenerated extends AbstractKotlinSteppingTest {
             doStepOverTest(fileName);
         }
 
+        @TestMetadata("stepOverReifiedParam.kt")
+        public void testStepOverReifiedParam() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverReifiedParam.kt");
+            doStepOverTest(fileName);
+        }
+
         @TestMetadata("stepOverSimpleFun.kt")
         public void testStepOverSimpleFun() throws Exception {
             String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverSimpleFun.kt");
+            doStepOverTest(fileName);
+        }
+
+        @TestMetadata("stepOverTryCatchWithInline.kt")
+        public void testStepOverTryCatchWithInline() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverTryCatchWithInline.kt");
+            doStepOverTest(fileName);
+        }
+
+        @TestMetadata("stepOverWhenInReturn.kt")
+        public void testStepOverWhenInReturn() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverWhenInReturn.kt");
+            doStepOverTest(fileName);
+        }
+
+        @TestMetadata("stepOverWhenWithInline.kt")
+        public void testStepOverWhenWithInline() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/debugger/tinyApp/src/stepping/stepOver/stepOverWhenWithInline.kt");
             doStepOverTest(fileName);
         }
     }

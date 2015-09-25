@@ -1070,6 +1070,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                     doTest(fileName);
                 }
 
+                @TestMetadata("prefix.kt")
+                public void testPrefix() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/annotations/options/prefix.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("repeatable.kt")
                 public void testRepeatable() throws Exception {
                     String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/annotations/options/repeatable.kt");
@@ -3339,6 +3345,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
             @TestMetadata("copyOfPrivateClass.kt")
             public void testCopyOfPrivateClass() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/dataClasses/copyOfPrivateClass.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("dataClassNoName.kt")
+            public void testDataClassNoName() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/dataClasses/dataClassNoName.kt");
                 doTest(fileName);
             }
 

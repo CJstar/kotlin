@@ -30,14 +30,15 @@ import org.jetbrains.kotlin.idea.caches.resolve.analyzeFully
 import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptor
 import org.jetbrains.kotlin.idea.codeInsight.CodeInsightUtils
-import org.jetbrains.kotlin.idea.core.refactoring.getLineCount
 import org.jetbrains.kotlin.idea.core.refactoring.getLineEndOffset
+import org.jetbrains.kotlin.idea.core.refactoring.getLineNumber
 import org.jetbrains.kotlin.idea.core.refactoring.getLineStartOffset
 import org.jetbrains.kotlin.idea.util.DebuggerUtils
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 
@@ -58,28 +59,125 @@ public class KotlinSteppingCommandProvider: JvmSteppingCommandProvider() {
 
         val file = sourcePosition.file as? JetFile ?: return null
 
-        val inlinedArguments = getInlinedArgumentsIfAny(sourcePosition)
-        if (inlinedArguments.isEmpty()) return null
+        val inlineFunctionCalls = getInlineFunctionCallsIfAny(sourcePosition)
+        if (inlineFunctionCalls.isEmpty()) return null
 
+        val inlinedArguments = getInlinedArgumentsIfAny(inlineFunctionCalls)
+
+        if (inlinedArguments.any { it.shouldNotUseStepOver(sourcePosition.elementAt) }) {
+            return null
+        }
+
+        val additionalElementsToSkip = sourcePosition.elementAt.getAdditionalElementsToSkip()
+
+        val containingFunction = sourcePosition.elementAt.getParentOfType<JetNamedFunction>(false)
+        val startLineNumber = containingFunction?.getLineNumber(true) ?: return null
+        val endLineNumber = containingFunction?.getLineNumber(false) ?: return null
+        val linesRange = startLineNumber + 1..endLineNumber + 1
         val locations = computedReferenceType.allLineLocations()
-        val countOfLinesInFile = file.getLineCount()
+                .dropWhile { it != location }
+                .drop(1)
+                .filter { it.method() == location.method() && it.lineNumber() in linesRange }
+                .dropWhile { it.lineNumber() == location.lineNumber() }
 
-        val nextLine = sourcePosition.line + 2 /* +1 - because of locations are counted from 1 and +1 - because we want next line */
+        for (locationAtLine in locations) {
+            val lineNumber = locationAtLine.lineNumber()
+            val lineStartOffset = file.getLineStartOffset(lineNumber - 1) ?: continue
+            if (inlinedArguments.any { it.textRange.contains(lineStartOffset) }) continue
+            if (additionalElementsToSkip.any { it.textRange.contains(lineStartOffset) }) continue
 
-        for (lineNumber in nextLine..countOfLinesInFile) {
-            val locationAtLine = locations.firstOrNull { it.lineNumber() == lineNumber }
-            if (locationAtLine != null) {
-                val lineStartOffset = file.getLineStartOffset(lineNumber - 1) ?: continue
-                if (inlinedArguments.any { it.textRange.contains(lineStartOffset) }) continue
+            val elementAt = file.findElementAt(lineStartOffset) ?: continue
 
-                val elementAt = file.findElementAt(lineStartOffset)
-                val xPosition = XSourcePositionImpl.createByElement(elementAt) ?: return null
+            val xPosition = XSourcePositionImpl.createByElement(elementAt) ?: return null
+            return suspendContext.debugProcess.createRunToCursorCommand(suspendContext, xPosition, ignoreBreakpoints)
+        }
 
-                return suspendContext.debugProcess.createRunToCursorCommand(suspendContext, xPosition, ignoreBreakpoints)
+        return suspendContext.debugProcess.createStepOutCommand(suspendContext)!!
+    }
+
+    private fun PsiElement.getAdditionalElementsToSkip(): List<PsiElement> {
+        val result = arrayListOf<PsiElement>()
+        val ifParent = getParentOfType<JetIfExpression>(false)
+        if (ifParent != null) {
+            if (ifParent.then.contains(this)) {
+                ifParent.elseKeyword?.let { result.add(it) }
+                ifParent.`else`?.let { result.add(it) }
+            }
+        }
+        val tryParent = getParentOfType<JetTryExpression>(false)
+        if (tryParent != null) {
+            val catchClause = getParentOfType<JetCatchClause>(false)
+            if (catchClause != null) {
+                result.addAll(tryParent.catchClauses.filter { it != catchClause })
             }
         }
 
-        return null
+        val whenEntry = getParentOfType<JetWhenEntry>(false)
+        if (whenEntry != null) {
+            if (whenEntry.expression.contains(this)) {
+                val whenParent = whenEntry.getParentOfType<JetWhenExpression>(false)
+                if (whenParent != null) {
+                    result.addAll(whenParent.entries.filter { it != whenEntry })
+                }
+            }
+        }
+
+        return result
+    }
+
+    private fun PsiElement.shouldNotUseStepOver(elementAt: PsiElement): Boolean {
+        val ifParent = getParentOfType<JetIfExpression>(false)
+        if (ifParent != null) {
+            // if (inlineFunCall()) {...}
+            if (ifParent.condition.contains(this)) {
+                return true
+            }
+
+            /*
+            <caret>if (...) inlineFunCall()
+                       else inlineFunCall()
+             */
+            val ifParentElementAt = elementAt.getParentOfType<JetIfExpression>(false)
+            if (ifParentElementAt == null) {
+                if (ifParent.then.contains(this)) {
+                    return true
+                }
+                if (ifParent.`else`.contains(this)) {
+                    return true
+                }
+            }
+        }
+
+        val tryParent = getParentOfType<JetTryExpression>(false)
+        if (tryParent != null) {
+            /* try { inlineFunCall() }
+               catch()...
+             */
+            if (tryParent.tryBlock.contains(this)) {
+                return true
+            }
+        }
+
+        val whenEntry = getParentOfType<JetWhenEntry>(false)
+        if (whenEntry != null) {
+            // <caret>inlineFunCall -> ...
+            if (whenEntry.conditions.any { it.contains(this) } ) {
+                return true
+            }
+
+            // <caret>1 == 2 -> inlineFunCall()
+            if (whenEntry.expression.contains(this)) {
+                val parentEntryElementAt = elementAt.getParentOfType<JetWhenEntry>(false) ?: return true
+                return parentEntryElementAt == whenEntry &&
+                        whenEntry.conditions.any { it.contains(elementAt) }
+            }
+        }
+
+        return false
+    }
+
+    private fun PsiElement?.contains(element: PsiElement): Boolean {
+        return this?.textRange?.contains(element.textRange) ?: false
     }
 
     override fun getStepOutCommand(suspendContext: SuspendContextImpl?, stepSize: Int): DebugProcessImpl.ResumeCommand? {
@@ -214,7 +312,16 @@ public class KotlinSteppingCommandProvider: JvmSteppingCommandProvider() {
         return result
     }
 
-    private fun getInlinedArgumentsIfAny(sourcePosition: SourcePosition): List<JetFunction> {
+    private fun getInlinedArgumentsIfAny(inlineFunctionCalls: List<JetCallExpression>): List<JetFunction> {
+        return inlineFunctionCalls.flatMap {
+            it.valueArguments
+                    .map { it.getArgumentExpression()  }
+                    .filterIsInstance<JetFunctionLiteralExpression>()
+                    .map { it.functionLiteral }
+        }
+    }
+
+    private fun getInlineFunctionCallsIfAny(sourcePosition: SourcePosition): List<JetCallExpression> {
         val file = sourcePosition.file as? JetFile ?: return emptyList()
         val lineNumber = sourcePosition.line
         var elementAt = sourcePosition.elementAt
@@ -231,18 +338,32 @@ public class KotlinSteppingCommandProvider: JvmSteppingCommandProvider() {
             startOffset++
         }
 
-        if (topMostElement == null) return emptyList()
+        if (topMostElement !is JetElement) return emptyList()
 
         val start = topMostElement.startOffset
         val end = topMostElement.endOffset
 
-        return CodeInsightUtils.
-                findElementsOfClassInRange(file, start, end, JetFunctionLiteral::class.java, JetNamedFunction::class.java)
-                .filter { JetPsiUtil.getParentCallIfPresent(it as JetExpression) != null }
-                .filterIsInstance<JetFunction>()
-                .filter {
-                    val context = it.analyze(BodyResolveMode.PARTIAL)
-                    InlineUtil.isInlinedArgument(it, context, false)
-                }
+        fun isInlineCall(expr: JetExpression): Boolean {
+            val context = expr.analyze(BodyResolveMode.PARTIAL)
+            val resolvedCall = expr.getResolvedCall(context) ?: return false
+            return InlineUtil.isInline(resolvedCall.resultingDescriptor)
+        }
+
+        val allInlineFunctionCalls = CodeInsightUtils.
+                findElementsOfClassInRange(file, start, end, JetExpression::class.java)
+                .map { JetPsiUtil.getParentCallIfPresent(it as JetExpression) }
+                .filterIsInstance<JetCallExpression>()
+                .filter { isInlineCall(it) }
+                .toSet()
+
+        // It is necessary to check range because of multiline assign
+        var linesRange = lineNumber..lineNumber
+        return allInlineFunctionCalls.filter {
+            val shouldInclude = it.getLineNumber() in linesRange
+            if (shouldInclude) {
+                linesRange = Math.min(linesRange.start, it.getLineNumber())..Math.max(linesRange.end, it.getLineNumber(false))
+            }
+            shouldInclude
+        }
     }
 }
