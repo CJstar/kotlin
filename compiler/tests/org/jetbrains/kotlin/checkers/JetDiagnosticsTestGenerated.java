@@ -15041,6 +15041,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                     doTest(fileName);
                 }
 
+                @TestMetadata("OnlyAscii.kt")
+                public void testOnlyAscii() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/syntheticExtensions/javaProperties/OnlyAscii.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("OnlyPublic.kt")
                 public void testOnlyPublic() throws Exception {
                     String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/syntheticExtensions/javaProperties/OnlyPublic.kt");
